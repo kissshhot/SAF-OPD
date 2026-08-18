@@ -1,6 +1,8 @@
 # SAF-OPD
 
-**SAF** (Stable Advantage Fusion) is a lightweight, four-stage framework for fusing a response-level RLVR (GRPO) advantage with a token-level On-Policy Distillation (OPD) advantage. Naive fixed-coefficient fusion of the two suffers from a **magnitude mismatch** (unbounded token-level OPD advantages can spike far beyond the bounded GRPO advantage and erase its signal) and a **temporal mismatch** (sustained full-strength OPD keeps pulling the student toward the teacher and limits exploration needed to surpass it). SAF resolves both issues via a sparsify-then-compress mechanism for magnitude control and a warm-up-then-anneal mechanism for temporal control, with each stage independently switchable and adding negligible overhead. Across seven mathematical reasoning and code generation benchmarks with Qwen3-1.7B/4B/8B, SAF avoids entropy collapse and consistently outperforms fixed-coefficient GRPO+OPD fusion.
+📄 **Paper:** [**SAF-OPD: Stable Advantage Fusion for On-Policy Distillation**](https://arxiv.org/abs/2607.29209) (arXiv, July 2025)
+
+**SAF** (Stable Advantage Fusion) is a lightweight, four-stage framework for fusing a response-level RLVR (GRPO) advantage with a token-level On-Policy Distillation (OPD) advantage. Reinforcement learning with verifiable rewards (RLVR) broadcasts a single response-level reward to every token, while on-policy distillation (OPD) scores each token against a stronger teacher for a dense advantage but caps performance at teacher quality. Naive fixed-coefficient fusion of the two suffers from a **magnitude mismatch** (unbounded token-level OPD advantages can spike far beyond the bounded GRPO advantage and erase its signal) and a **temporal mismatch** (sustained full-strength OPD keeps pulling the student toward the teacher and limits exploration needed to surpass it). SAF resolves both issues via a sparsify-then-compress mechanism for magnitude control and a warm-up-then-anneal mechanism for temporal control, with each stage independently switchable and adding negligible overhead. Across seven mathematical reasoning and code generation benchmarks with Qwen3-1.7B/4B/8B, SAF achieves 0.51–2.70% aggregate improvements, avoids entropy collapse, and consistently outperforms fixed-coefficient GRPO+OPD fusion.
 
 <p align="center">
   <img src="images/intro.png" width="55%" alt="Fixed-coefficient fusion versus SAF">
@@ -97,6 +99,21 @@ CHECKPOINT_PATH=checkpoints/saf-opd-math/mixed_opd1.0_topk20_tanh01_warmup100_kl
     bash verl/examples/saf_opd/merge.sh
 ```
 
+## Benchmarks
+
+SAF is evaluated on **7 benchmarks** across mathematical reasoning and code generation:
+
+### Mathematical Reasoning (4 benchmarks)
+- **AIME 2024** — American Invitational Mathematics Examination
+- **AIME 2025** — American Invitational Mathematics Examination  
+- **HMMT February 2025** — Harvard-MIT Math Tournament
+- **HMMT November 2025** — Harvard-MIT Math Tournament
+
+### Code Generation (3 benchmarks)
+- **HumanEval+** — Extended HumanEval benchmark
+- **MBPP+** — Extended MBPP benchmark
+- **LiveCodeBench** — Competitive programming benchmark
+
 ## Evaluation
 
 ### Math Reasoning Evaluation
@@ -135,11 +152,14 @@ Our training code is mainly based on [verl](https://github.com/volcengine/verl).
 
 
 ## Citation
-If you find our work helpful, please kindly cite as
+
+If you find our work helpful, please kindly cite as:
+
 ```bibtex
-@article{anonymous2027saf,
+@article{ding2025safopd,
   title={SAF-OPD: Stable Advantage Fusion for On-Policy Distillation},
-  author={Anonymous Submission},
-  year={2027}
+  author={Ding, Yifan and Wei, Xincheng and Li, Yoshua Y. and Li, Ziheng and Lu, Yuquan and Zhang, Siyu and Ma, Dongsheng and Weng, Rongxiang and Cai, Xunliang and Chen, Yun},
+  journal={arXiv preprint arXiv:2607.29209},
+  year={2025}
 }
 ```
